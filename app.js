@@ -1,5 +1,5 @@
 // 모듈을 추출합니다.
-var rint = require('./rint.js');
+var rint = require('./rint');
 
 // 이벤트를 연결합니다.
 rint.timer.on('tick', function(code) {
