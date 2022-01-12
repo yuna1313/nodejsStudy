@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>list</title>
+</head>
+<body>
+	<table border=1>
+		<tr>
+			<th>아이디</th>
+			<th>비밀번호</th>
+			<th>이름</th>
+		</tr>
+		<% data.forEach(function(item, index) { %>
+		<tr>
+			<td><%=item.id %></td>
+            <td><%=item.password %></td>
+            <td><%=item.name %></td>
+		</tr>
+        <% }); %>
+	</table>
+    <a href="/" style="text-decoration: none">클릭하면 인덱스 페이지로 이동합니다.</a>
+</body>
+</html>
