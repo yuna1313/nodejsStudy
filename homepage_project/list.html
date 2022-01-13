@@ -7,15 +7,21 @@
 <body>
 	<table border=1>
 		<tr>
+            <th>번호</th>
 			<th>아이디</th>
 			<th>비밀번호</th>
 			<th>이름</th>
+            <th>수정</th>
+            <th>삭제</th>
 		</tr>
 		<% data.forEach(function(item, index) { %>
 		<tr>
+            <td><%=item.num %></td>
 			<td><%=item.id %></td>
             <td><%=item.password %></td>
             <td><%=item.name %></td>
+            <td><a href="/update/<%=item.num %>">수정</a></td>
+            <td><a href="/delete/<%=item.num %>">삭제</a></td>
 		</tr>
         <% }); %>
 	</table>

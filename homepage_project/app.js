@@ -78,7 +78,7 @@ app.post('/member', function(request, response) {
     var body = request.body;
 
     // 데이터베이스 쿼리를 실행합니다.
-    client.query('INSERT INTO homepage1 (id, pw, name) VALUES(?, ?, ?)', [
+    client.query('INSERT INTO homepage1 (id, password, name) VALUES(?, ?, ?)', [
         body.id, body.pw, body.name
     ], function() {
         response.redirect('/');
@@ -99,9 +99,32 @@ app.get('/list', function(request, response) {
 });
 
 // 회원수정
-app.get('/update', function(request, response) {
+app.get('/update/:num', function(request, response) {
     // 파일을 읽습니다.
     fs.readFile('update.html', 'utf8', function(error, data) {
-        
+        client.query('SELECT * FROM homepage1 WHERE num=?', [request.params.num], 
+        function(error, result) {
+            response.send(ejs.render(data, {
+                data: result[0]
+            }));
+        });
+    });
+});
+
+app.post('/update/:num', function(request, response) {
+    var body = request.body;
+
+    client.query('UPDATE homepage1 SET name=?, password=? WHERE num=?', [
+        body.name, body.pw, request.params.num
+    ], function() {
+        response.redirect('/');
+    });
+});
+
+// 회원삭제
+app.get('/delete/:num', function(request, response) {
+    client.query('DELETE FROM homepage1 WHERE num=?', [request.params.num], 
+    function() {
+        response.redirect('/');
     });
 });
