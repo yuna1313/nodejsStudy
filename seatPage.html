@@ -58,14 +58,15 @@
 
             //Ajax를 수행합니다.
             $.getJSON('/seat', { dummy: new Date().getTime() }, function(data) {
+                // 좌석을 생성합니다.
                 $.each(data, function(indexY, line) {
                     var $line = $('<div></div>').addClass('line');
                     $.each(line, function(indexX, seat) {
                         // 문서 객체를 생성하고 변수 $line에 추가합니다.
                         var $output = $('<div></div>', {
                             'class' : 'seat',
-                            'data-x' : 'indexX',
-                            'data-y' : 'indexY'
+                            'data-x' : indexX,
+                            'data-y' : indexY
                         }).appendTo($line);
                         if(seat == 1) {
                             // 좌석이 비어있으면 enable 클래스와 click 리스너를 추가합니다.
