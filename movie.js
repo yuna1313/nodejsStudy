@@ -47,4 +47,9 @@ io.sockets.on('connection', function(socket) {
         seats[data.y][data.x] = 2;
         io.sockets.emit('reserve', data);
     });
+
+    socket.on('cancle', function(data) {
+        seats[data.y][data.x] = 1;
+        io.sockets.emit('cancle', data);
+    });
 });

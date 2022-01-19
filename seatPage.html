@@ -36,6 +36,12 @@
             $target.removeClass('enable');
             $target.addClass('disable');
         });
+
+        socket.on('cancle', function(data) {
+            var $target = $('div[data-x=' + data.x + '][data-y=' + data.y + ']');
+            $target.removeClass('disable');
+            $target.addClass('enable');
+        });
     </script>
     <!-- 초기 좌석 생성 -->
     <script>
@@ -45,8 +51,21 @@
                 var x = $(this).attr('data-x');
                 var y = $(this).attr('data-y');
                 if(confirm('좌석을 예약하겠습니까?')) {
-                    $(this).off('click');
                     socket.emit('reserve', {
+                        x: x,
+                        y: y
+                    });
+                }
+                else {
+                    alert('취소되었습니다.');
+                }
+            };
+
+            var cancleSeat = function() {
+                var x = $(this).attr('data-x');
+                var y = $(this).attr('data-y');
+                if(confirm('예약을 취소하겠습니까?')) {
+                    socket.emit('cancle', {
                         x: x,
                         y: y
                     });
@@ -74,7 +93,7 @@
                         }
                         else if(seat == 2) {
                             // 좌석이 사용 불가능하면 disable 클래스를 추가합니다.
-                            $output.addClass('disable');
+                            $output.addClass('disable').on('click', cancleSeat);
                         }
                     });
 
