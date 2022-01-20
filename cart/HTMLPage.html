@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -31,38 +31,37 @@
                 if($(this).attr('toggle') != 'off') {
                     // 변수를 선언합니다.
                     var index = $(this).attr('data-index');
-
+                    
                     // 소켓 이벤트를 발생시킵니다.
                     socket.emit('cart', Number(index));
-
+                    
                     // 아이콘 및 테마 변환
                     changeIcon(this, 'ui-icon-heart', 'ui-icon-check');
-
+                    
                     // 토글 변수를 변경합니다.
-                    $(this).attr('data-index');
+                    $(this).attr('toggle', 'off');
                 }
                 else {
                     // 변수를 선언합니다.
-                    alert('Hello');
                     var index = $(this).attr('data-index');
-
-                    // 구매 의사를 물어봅니다.
-                    if(confirm('물건을 구매하겠습니까?')) {
+                    
+                    // 구매 의사 묻기
+                    if(confirm('물건 구매하겠습니까?')) {
                         // 소켓 이벤트를 발생시킵니다.
                         socket.emit('buy', Number(index));
-
+                        
                         // 리스트 아이템을 제거합니다.
-                        $(this).parent.remove();
+                        $(this).parent().remove();
                         $('#listview').listview('refresh');
                     }
                     else {
                         // 소켓 이벤트를 발생시킵니다.
                         socket.emit('return', Number(index));
-
+                        
                         // 아이콘 및 테마 변환
                         changeIcon(this, 'ui-icon-check', 'ui-icon-heart');
                     }
-
+                    
                     // 토글 변수를 변경합니다.
                     $(this).attr('toggle', 'on');
                 }
@@ -84,7 +83,7 @@
                         <img src="chrome.png"/>
                         <h3><%= item.name %></h3>
                         <p><%= item.price %>원</p>
-                        <span class="ul-li-count"><%= item.count %></span>
+                        <span class="ui-li-count"><%= item.count %></span>
                     </a>
                     <a href="#" data-icon="heart" data-index="<%= item.index %> "></a>
                 </li>
