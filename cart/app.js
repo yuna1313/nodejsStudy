@@ -3,6 +3,7 @@ var fs = require('fs');
 var ejs = require('ejs');
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
 
 // 생성자 함수를 선언합니다.
 var counter = 0;
@@ -27,6 +28,9 @@ var products = [
 
 // 웹 서버를 생성합니다.
 var app = express();
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 var server = http.createServer(app);
 
 // 웹 서버를 설정합니다.
@@ -41,6 +45,23 @@ app.get('/', function(request, response) {
     response.send(ejs.render(htmlPage, {
         products: products
     }));
+});
+
+app.get('/login', function(request, response) {
+    var htmlPage = fs.readFileSync('login.html', 'utf8');
+    response.send(htmlPage);
+});
+
+app.post('/login', function(request, response) {
+    var body = request.body;
+
+    if(body.id == 'admin' && body.pw == '1234') {
+        console.log('hello');
+        response.send('<script>alert("환영합니다."); location.href="/";</script>');
+    }
+    else {
+        response.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); location.href="/login";</script>');
+    }
 });
 
 // 웹 서버를 실행합니다.
@@ -68,7 +89,7 @@ io.sockets.on('connection', function(socket) {
             count: products[index].count
         });
     };
-
+    
     // 변수를 선언합니다.
     var cart = {};
 
@@ -110,4 +131,5 @@ io.sockets.on('connection', function(socket) {
     socket.on('return', function(index) {
         onReturn(index);
     });
+    
 });
