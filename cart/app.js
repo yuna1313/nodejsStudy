@@ -56,11 +56,10 @@ app.post('/login', function(request, response) {
     var body = request.body;
 
     if(body.id == 'admin' && body.pw == '1234') {
-        console.log('hello');
-        response.send('<script>alert("환영합니다."); location.href="/";</script>');
+        response.redirect('/');
     }
     else {
-        response.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); location.href="/login";</script>');
+        response.redirect('/login');
     }
 });
 
