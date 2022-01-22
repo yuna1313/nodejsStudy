@@ -7,8 +7,8 @@ var express = require('express');
 var client = require('mysql').createConnection({
     user: 'root',
     password: 'apmsetup',
-    database: 'location',
-    port: '3307'
+    port: '3306',
+    database: 'Location'
 });
 
 // 웹 서버를 생성합니다.
