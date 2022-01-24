@@ -34,7 +34,7 @@ app.get('/observer', function(request, response) {
 // GET - /showdata
 app.get('/showdata', function(request, response) {
     // 데이터베이스의 데이터를 제공합니다.
-    client.query('SELECT * FROM locations WHERE name=?', [request.params.name],
+    client.query('SELECT * FROM locations WHERE name=?', [request.param('name')],
     function(error, data) {
         response.send(data);
     });
@@ -56,7 +56,8 @@ io.sockets.on('connection', function(socket) {
     // location 이벤트
     socket.on('location', function(data) {
         // 데이터를 삽입합니다.
-        client.query('INSERT INTO locations(name, latitude, longitude, date) VALUES (?, ?, ?, NOW())', [data.name, data.latitude, data.longitude]);
+        client.query('INSERT INTO locations(name, latitude, longitude, date) VALUES(?, ?, ?, NOW())',
+        [data.name, data.latitude, data.longitude]);
 
         // receive 이벤트를 발생시킵니다.
         io.sockets.in(data.name).emit('receive', {
