@@ -27,16 +27,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'secret key',
+  secret: 'secret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 24000 * 60 * 60 // 쿠키 유효기간 24시간
+  }
 }));
 
 // 라우트를 실행합니다.
 // 메인화면
 app.get('/', function(request, response) {
   response.render('index', {
-    data: request.session.id
+    session: request.session.memberId
   });
 });
 
@@ -64,6 +67,32 @@ app.get('/list', function(request, response) {
           data: results
         });
     });
+});
+
+// 로그인
+app.get('/login', function(request, response) {
+  response.render('login');
+});
+
+app.post('/login', function(request, response) {
+  var body = request.body;
+  // 데이터베이스 쿼리를 실행합니다,
+  client.query('SELECT * FROM people WHERE id=?', [body.id], function(error, data) {
+    if(data[0] !== undefined && data[0].password == body.pw) {
+      request.session.memberId = data[0].id;
+      response.redirect('/');
+    }
+    else {
+      response.render('login');
+    }
+   });
+});
+
+// 로그아웃
+app.get('/logout', function(request, response) {
+  request.session.destroy(function() {
+    response.redirect('/');
+  });
 });
 
 // 오류를 처리합니다.
