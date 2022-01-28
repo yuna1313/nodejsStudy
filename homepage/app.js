@@ -117,6 +117,17 @@ app.post('/update', function(request, response) {
   });
 });
 
+// 회원탈퇴
+app.get('/delete', function(request, response) {
+  response.render('delete', {
+    session: request.session.memberId
+  });
+});
+
+app.post('delete',function(request, response) {
+  
+});
+
 // 오류를 처리합니다.
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
