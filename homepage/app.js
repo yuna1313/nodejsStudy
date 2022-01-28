@@ -95,6 +95,28 @@ app.get('/logout', function(request, response) {
   });
 });
 
+// 회원정보 수정
+app.get('/update', function(request, response) {
+  // 데이터베이스 쿼리를 실행합니다.
+  client.query('SELECT * FROM people WHERE id=?', [request.session.memberId], function(error, result) {
+    response.render('update', {
+      session: request.session.memberId,
+      data: result[0]
+    })
+  });
+});
+
+app.post('/update', function(request, response) {
+  var body = request.body;
+
+  // 데이터베이스 쿼리를 실행합니다.
+  client.query('UPDATE people SET name=?, password=? WHERE id=?',[
+    body.name, body.pw, request.session.memberId
+  ], function() {
+    response.redirect('/');
+  });
+});
+
 // 오류를 처리합니다.
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

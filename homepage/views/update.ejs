@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>update</title>
+</head>
+<body>
+	<% if(session == null) { %>
+		<script>alert('로그인 후에 사용할 수 있습니다.'); location.href='login';</script>
+	<% } else { %>
+	<form method="post">
+		<%=session %><br>
+		<input type="password" name="pw" placeholder="비밀번호" id="pw"><br>
+		<input type="text" name="name" placeholder="<%=data.name %>" id="name"><br>
+		<input type="submit" value="회원 수정">
+		<input type="button" value="취소" onclick="javascript:location.href='/';"><br>
+	</form>
+	<% } %>
+</body>
+</html>
