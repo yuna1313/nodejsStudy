@@ -120,12 +120,42 @@ app.post('/update', function(request, response) {
 // 회원탈퇴
 app.get('/delete', function(request, response) {
   response.render('delete', {
-    session: request.session.memberId
+    session: request.session.memberId,
+    msg: null
   });
 });
 
-app.post('delete',function(request, response) {
-  
+app.post('/delete',function(request, response) {
+  var body = request.body;
+
+  if(body.pw == body.confirmPw) {
+    // 데이터베이스 쿼리를 실행합니다.
+    client.query('SELECT * FROM people WHERE id=?', [request.session.memberId],
+    function(error, result) {
+      if(result[0].password == body.pw) {
+        client.query('DELETE FROM people WHERE id=?', [request.session.memberId],
+        function() {
+          request.session.destroy();
+          response.render('index', {
+            msg: '회원 탈퇴를 완료하였습니다.',
+            session: null
+          });
+        });
+      }
+      else {
+        response.render('delete', {
+          msg: '비밀번호가 일치하지 않습니다.',
+          session: request.session.memberId
+        });
+      }
+    });
+  }
+  else {
+    response.render('delete', {
+      msg: '비밀번호 확인이 일치하지 않습니다.',
+      session: request.session.memberId
+    });
+  }
 });
 
 // 오류를 처리합니다.
